@@ -1,0 +1,33 @@
+#!/bin/sh
+set -eu
+cd "$(dirname "$0")/.."
+
+cert_dir=".local-ssl"
+mkdir -p "$cert_dir"
+if [ -f "$cert_dir/localhost.pem" ] && [ -f "$cert_dir/localhost-key.pem" ] && [ -f "$cert_dir/local-ca.pem" ]; then
+  echo "Local HTTPS certificates already exist in $cert_dir."
+  exit 0
+fi
+
+openssl genrsa -out "$cert_dir/local-ca-key.pem" 3072
+openssl req -x509 -new -key "$cert_dir/local-ca-key.pem" -sha256 -days 3650 \
+  -subj "/CN=Local Studio Development CA" \
+  -addext "basicConstraints=critical,CA:TRUE" \
+  -addext "keyUsage=critical,keyCertSign,cRLSign" \
+  -out "$cert_dir/local-ca.pem"
+
+openssl genrsa -out "$cert_dir/localhost-key.pem" 2048
+openssl req -new -key "$cert_dir/localhost-key.pem" -subj "/CN=localhost" \
+  -out "$cert_dir/localhost.csr"
+cat > "$cert_dir/localhost.ext" <<'EOF'
+basicConstraints=critical,CA:FALSE
+keyUsage=critical,digitalSignature,keyEncipherment
+extendedKeyUsage=serverAuth
+subjectAltName=DNS:localhost,IP:127.0.0.1
+EOF
+openssl x509 -req -in "$cert_dir/localhost.csr" -CA "$cert_dir/local-ca.pem" \
+  -CAkey "$cert_dir/local-ca-key.pem" -CAcreateserial -days 825 -sha256 \
+  -extfile "$cert_dir/localhost.ext" -out "$cert_dir/localhost.pem"
+rm "$cert_dir/localhost.csr" "$cert_dir/localhost.ext" "$cert_dir/local-ca.srl"
+chmod 600 "$cert_dir"/*-key.pem
+echo "Created local HTTPS certificates in $cert_dir."

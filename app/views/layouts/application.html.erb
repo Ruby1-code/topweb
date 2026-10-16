@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Local Studio — Make room for good ideas</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#f5f4ef">
+    <meta name="description" content="A small space on the web for thoughtful work and fresh ideas.">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <style>
+      :root { --ink: #202821; --muted: #657064; --paper: #f5f4ef; --green: #244d3d; --lime: #d8ed9c; }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: var(--paper); color: var(--ink); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      a { color: inherit; text-decoration: none; }
+      .wrap { max-width: 1160px; margin: 0 auto; padding: 0 36px; }
+      header { height: 86px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #dedfd6; }
+      .brand { display: flex; align-items: center; gap: 11px; font-size: 15px; font-weight: 720; letter-spacing: -.03em; }
+      .mark { width: 30px; height: 30px; border-radius: 50%; background: var(--green); display: grid; place-items: center; color: var(--lime); font-size: 17px; }
+      nav { display: flex; align-items: center; gap: 32px; color: #50594f; font-size: 13px; }
+      nav a:hover, .text-link:hover { color: #668a44; }
+      .nav-cta { color: var(--ink); border: 1px solid #bfc4b9; padding: 11px 17px; border-radius: 999px; }
+      main { padding: 76px 0 70px; }
+      .hero { display: grid; grid-template-columns: 1.04fr .96fr; align-items: center; gap: 64px; }
+      .eyebrow { display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: .14em; font-size: 10px; font-weight: 700; color: #66715f; }
+      .eyebrow:before { content: ""; width: 23px; height: 1px; background: #829177; }
+      h1 { max-width: 570px; margin: 23px 0 22px; font-size: clamp(48px, 6vw, 76px); line-height: .99; letter-spacing: -.075em; font-weight: 560; }
+      h1 em { color: #68875a; font-family: Georgia, serif; font-weight: 400; }
+      .intro { max-width: 445px; color: var(--muted); font-size: 16px; line-height: 1.75; }
+      .actions { display: flex; align-items: center; gap: 25px; margin-top: 32px; font-size: 13px; font-weight: 650; }
+      .button { background: var(--green); color: white; padding: 15px 21px; border-radius: 999px; transition: transform .2s, background .2s; }
+      .button:hover { background: #32644f; transform: translateY(-2px); }
+      .text-link { display: inline-flex; align-items: center; gap: 8px; }
+      .scene { min-height: 420px; position: relative; overflow: hidden; border-radius: 48% 48% 8px 8px; background: #d9dfcc; }
+      .sun { position: absolute; width: 104px; height: 104px; border-radius: 50%; background: #f2cc83; top: 48px; right: 73px; }
+      .hill { position: absolute; border-radius: 50% 50% 0 0; width: 125%; height: 52%; left: -14%; bottom: -13%; background: #81966c; transform: rotate(-9deg); }
+      .hill.back { width: 112%; height: 44%; left: 10%; bottom: 11%; background: #a8b495; transform: rotate(13deg); }
+      .hill.front { width: 130%; height: 39%; left: -17%; bottom: -18%; background: #48654c; transform: rotate(5deg); }
+      .plant { position: absolute; bottom: 13%; left: 23%; height: 170px; width: 3px; background: #385743; transform: rotate(8deg); transform-origin: bottom; z-index: 2; }
+      .leaf { position: absolute; width: 48px; height: 20px; border-radius: 100% 0 100% 0; background: #557455; }
+      .leaf.one { top: 23px; left: -43px; transform: rotate(24deg); } .leaf.two { top: 53px; left: 2px; transform: rotate(-22deg) scaleX(-1); }
+      .leaf.three { top: 83px; left: -44px; transform: rotate(18deg); }
+      .scene-note { position: absolute; top: 22px; left: 24px; color: #52624f; text-transform: uppercase; letter-spacing: .12em; font-size: 9px; font-weight: 700; }
+      .below { margin-top: 75px; padding-top: 24px; border-top: 1px solid #dedfd6; display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+      .below-label { color: #778073; text-transform: uppercase; letter-spacing: .12em; font-size: 10px; }
+      .values { display: flex; gap: 42px; color: #475447; font-size: 12px; }
+      .values span:before { content: "✳"; color: #87a06d; margin-right: 9px; }
+      footer { padding: 23px 0 36px; color: #879084; font-size: 11px; display: flex; justify-content: space-between; }
+      @media (max-width: 760px) { .wrap { padding: 0 22px; } header { height: 72px; } nav { gap: 16px; } nav a:not(.nav-cta) { display: none; } main { padding: 48px 0; } .hero { grid-template-columns: 1fr; gap: 42px; } h1 { font-size: clamp(50px, 13vw, 72px); } .scene { min-height: 340px; } .below { margin-top: 48px; align-items: flex-start; flex-direction: column; } .values { gap: 15px; flex-wrap: wrap; } }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <a class="brand" href="/"><span class="mark">✳</span> local studio</a>
+        <nav aria-label="Main navigation">
+          <a href="#about">Our approach</a>
+          <a href="#notes">Field notes</a>
+          <a class="nav-cta" href="mailto:hello@localstudio.example">Say hello ↗</a>
+        </nav>
+      </header>
+      <%= yield %>
+      <footer><span>© <%= Time.current.year %> Local Studio</span><span>Made for slower, better ideas.</span></footer>
+    </div>
+  </body>
+</html>
